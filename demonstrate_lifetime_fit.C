@@ -37,31 +37,38 @@ void SetTF1(TF1 *f, int LColor=2, int LWidth=0, int LStyle=1, int Npx=1000){
   f->SetNpx(Npx);
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void exp_gaus(){
+void demonstrate_lifetime_fit(){
 
-gRandom -> SetSeed( time(NULL) ); //seed file set by time
-gStyle->SetOptStat(0);
+  gRandom -> SetSeed( time(NULL) ); //seed file set by time
+  gStyle->SetOptStat(0);
+  gStyle->SetPadTopMargin(0.05);
+  gStyle->SetPadLeftMargin(0.10);
+  gStyle->SetPadRightMargin(0.04);
+  gStyle->SetPadBottomMargin(0.15);
 
-TH1F *hist = new TH1F("hist","hist",50, -0.5, 2.0);//define histgram
-  hist->SetTitle("");
-  hist->SetLineColor(4);
-  hist->SetLineWidth(1);
-  hist->GetXaxis()->SetTitle("Decay time[ns]");
-  hist->GetYaxis()->SetTitle("counts/50ps");
-
+  //////////////
+  //parameters//
+  //////////////
+  int nevent = 10000;
+  int nbin = 100;
+  double t_min = -0.5;//ns
+  double t_max = 2.;//ns
   double t;
+  double t0;
   double tau = 0.2;//define (lifetime)
   double sigma = 0.1;//define (resolution)
-  for(int i=0;i<1000;i++){//loop
-    t       =  gRandom -> Exp(tau);//generate random value
-    t      +=  gRandom -> Gaus(0.,sigma);//generate random value
-    hist ->Fill(t);
-  }
+
+  TH1F *h_delay = new TH1F("h_delay","h_delay",nbin, t_min, t_max);//define h_delaygram
+  SetTH1(h_delay,"","Decay time[ns]",Form("counts/%.0lfps",1000*(t_max - t_min)/nbin ),1,1000,0);
+  h_delay->GetYaxis()->SetTitleOffset(0.7);
+
+  TH1F *h_respo = new TH1F("h_respo","h_respo",nbin, t_min, t_max);//define h_respogram
+  SetTH1(h_respo,"","Decay time[ns]",Form("counts/%.0lfps",1000*(t_max - t_min)/nbin ),2,1000,0);
 
   TF1 *f,*f_gaus;
   f = new TF1("f",expgaus,-1000,3000,4);
   f->SetParNames("area","tau","sigma","mean");
-  f->SetParameter(0,1000/50.); //20 bin num.
+  f->SetParameter(0,(double)nevent/nbin); //20 bin num.
   f->SetParameter(1,tau);  f->SetParameter(2,sigma);  f->SetParameter(3,0.);
   SetTF1(f    ,1,3,1,2000);
 
@@ -71,13 +78,37 @@ TH1F *hist = new TH1F("hist","hist",50, -0.5, 2.0);//define histgram
   f_gaus->SetParameter(1,f->GetParameter(3));
   f_gaus->SetParameter(2,f->GetParameter(2));
 
-  hist->Fit(f,"0LL","",-0.5,2);
+  for(int i=0;i<5000;i++){//loop
+    t       =  gRandom -> Exp(tau);//generate random value
+    t0      =  gRandom -> Gaus(0.,sigma);//generate random value
+    t      += t0;
+    h_respo ->Fill(t0);
+    h_delay ->Fill(t);
+  }
 
-  TCanvas *c1 = new TCanvas("c1","c1",800,800);
-  c1->Clear();c1->cd(1);
+
+  h_delay->Fit(f,"0LL","",-0.5,2);
+
+  TCanvas *c[2];
+  for(int i=0;i<2;i++){
+    c[i] = new TCanvas(Form("c%d",i+1),Form("c%d",i+1),1600,800);
+  }
+  c[0]->Clear();c[0]->cd(1);
   gPad->SetLogy(1);
-  hist->Draw();
+  h_delay->Draw();
+  h_respo->Draw("same");
+  
+  c[1]->Clear();c[1]->cd(1);
+  gPad->SetLogy(1);
+  h_delay->Draw();
+  h_respo->Draw("same");
   f->Draw("same");
   //f_gaus->Draw("same");
 
+  //c[0]->Print("pdf/demo_life.pdf[");
+  //c[0]->Print("pdf/demo_life.pdf" );
+  //c[1]->Print("pdf/demo_life.pdf" );
+  //c[1]->Print("pdf/demo_life.pdf]");
+  c[0]->Print("pdf/demo_life1.png" );
+  c[1]->Print("pdf/demo_life2.png" );
 }
