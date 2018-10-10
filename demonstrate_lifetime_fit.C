@@ -95,13 +95,13 @@ void demonstrate_lifetime_fit(){
   }
   c[0]->Clear();c[0]->cd(1);
   gPad->SetLogy(1);
-  h_delay->Draw();
-  h_respo->Draw("same");
+  h_respo->Draw("");
+  h_delay->Draw("same");
   
   c[1]->Clear();c[1]->cd(1);
   gPad->SetLogy(1);
-  h_delay->Draw();
-  h_respo->Draw("same");
+  h_respo->Draw("");
+  h_delay->Draw("same");
   f->Draw("same");
   //f_gaus->Draw("same");
 
@@ -109,6 +109,7 @@ void demonstrate_lifetime_fit(){
   //c[0]->Print("pdf/demo_life.pdf" );
   //c[1]->Print("pdf/demo_life.pdf" );
   //c[1]->Print("pdf/demo_life.pdf]");
+  
   c[0]->Print("pdf/demo_life1.png" );
   c[1]->Print("pdf/demo_life2.png" );
 }
