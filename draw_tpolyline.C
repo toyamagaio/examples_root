@@ -9,6 +9,7 @@ void draw_tpolyline(){
   tp_tdl.SetFillColor(2);
   tp_tdl.SetFillStyle(1001);
   tp_tdl.SetLineColor(1);
+  tp_tdl.SetLineStyle(1);
 
 
   TGaxis tga1;
@@ -43,6 +44,7 @@ void draw_tpolyline(){
     z[4]=tdl_z1[i];y[4]=tdl_y1[i];
     theta+=theta_step;
     tp_tdl.DrawPolyLine(5,z,y,"f");
+    tp_tdl.DrawPolyLine(5,z,y);
   } 
 
 
