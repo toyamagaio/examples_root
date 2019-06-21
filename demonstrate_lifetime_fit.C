@@ -1,3 +1,4 @@
+#include <iostream>
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 double expgaus(double *x, double *par) {
   //par[0]=Total area
@@ -37,7 +38,7 @@ void SetTF1(TF1 *f, int LColor=2, int LWidth=0, int LStyle=1, int Npx=1000){
   f->SetNpx(Npx);
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void demonstrate_lifetime_fit(){
+void demonstrate_lifetime_fit(double sigma = 0.15){
 
   gRandom -> SetSeed( time(NULL) ); //seed file set by time
   gStyle->SetOptStat(0);
@@ -49,14 +50,14 @@ void demonstrate_lifetime_fit(){
   //////////////
   //parameters//
   //////////////
-  int nevent = 10000;
-  int nbin = 100;
+  int nevent = 750;
+  int nbin = 50;
   double t_min = -0.5;//ns
   double t_max = 2.;//ns
   double t;
   double t0;
   double tau = 0.2;//define (lifetime)
-  double sigma = 0.1;//define (resolution)
+  //double sigma = 0.15;//define (resolution)
 
   TH1F *h_delay = new TH1F("h_delay","h_delay",nbin, t_min, t_max);//define h_delaygram
   SetTH1(h_delay,"","Decay time[ns]",Form("counts/%.0lfps",1000*(t_max - t_min)/nbin ),1,1000,0);
@@ -78,7 +79,7 @@ void demonstrate_lifetime_fit(){
   f_gaus->SetParameter(1,f->GetParameter(3));
   f_gaus->SetParameter(2,f->GetParameter(2));
 
-  for(int i=0;i<5000;i++){//loop
+  for(int i=0;i<nevent;i++){//loop
     t       =  gRandom -> Exp(tau);//generate random value
     t0      =  gRandom -> Gaus(0.,sigma);//generate random value
     t      += t0;
@@ -109,7 +110,16 @@ void demonstrate_lifetime_fit(){
   //c[0]->Print("pdf/demo_life.pdf" );
   //c[1]->Print("pdf/demo_life.pdf" );
   //c[1]->Print("pdf/demo_life.pdf]");
-  
-  c[0]->Print("pdf/demo_life1.png" );
-  c[1]->Print("pdf/demo_life2.png" );
+
+  double tau_ps = 1000.*tau;
+  double sigma_ps = 1000.*sigma;
+  c[0]->Print(Form("pdf/demo_life1_tau%d_wid%d_ev%d.png" ,(int)tau_ps,(int)sigma_ps,nevent));
+  c[1]->Print(Form("pdf/demo_life2_tau%d_wid%d_ev%d.png" ,(int)tau_ps,(int)sigma_ps,nevent));
+
+  ofstream ofs;
+  if( ofs.is_open() )ofs.close(); 
+  ofs.open("output.txt",ios::out|ios::trunc);
+  ofs<<tau_ps<<" "<<sigma_ps<<" "<<nevent<<" "<<1000.*f->GetParError(1)<<endl;
+
+
 }
