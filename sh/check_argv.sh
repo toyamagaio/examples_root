@@ -6,6 +6,11 @@ if [ $# -ne 1 ];then
   exit
 fi
 
+# -lt : less than
+# -gt : greater than
+# -eq : equal to
+# -ne : not equal to
+
 if [ ${1} -lt 10 ];then
    run=000${1}
 elif [ ${1} -lt 100 ];then
