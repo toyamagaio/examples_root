@@ -1,11 +1,11 @@
 void beta_mom(){
-Double_t m[4]={139.57018, 493.677 ,938.272046, 0.511};
+Double_t m[4]={938.272046, 493.677 ,139.57018,  0.511};
 Double_t n[2]={1.05, 1.5};
 
 TCanvas *c1 =new TCanvas("c1","canvas",800,600);
-  TH1F* frames =  c1 -> DrawFrame( -10, -10, 50, 80 );
-frames->GetXaxis()->SetTitle("momentum[MeV/c]");
-frames->GetYaxis()->SetTitle("beta");
+  TH1F* frames =  c1 -> DrawFrame(   0,   0, 1500, 1.1 );
+frames->GetXaxis()->SetTitle("Momentum[MeV/c]");
+frames->GetYaxis()->SetTitle("#beta");
 frames->Draw();
 
 TF1 *f[6];
@@ -27,7 +27,7 @@ for(int i=4;i<6;i++){
   }
 f[0]->GetXaxis()->SetTitle("momentum[MeV/c]");
 f[0]->GetYaxis()->SetTitle("beta");
-f[0]->Draw();
+f[0]->Draw("same");
 f[1]->Draw("same");
 f[2]->Draw("same");
 f[3]->Draw("same");

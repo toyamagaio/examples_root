@@ -1,29 +1,5 @@
 double GetGamma(double Ee,double Eep, double theta_e){
   //Assuming electron mass is 0 because our energy/mom region is GeV order
-  //input paramerters//
-  //double Ee  = 4.5;//[GeV] beam energy
-  //double Eep = 3.0;//[GeV] scattered electron energy
-  //double theta_e = 6.5;//[deg] scattered angle
-
-  //E05-115
-  //Ee  = 2.344;//[GeV] beam energy
-  //Eep = 0.844;//[GeV] scattered electron energy
-  //theta_e = 4.0;//[deg] scattered angle
-
-  //E12-15-008 proposal (48Ca proposal)
-  //Ee  = 4.5238;//[GeV] beam energy
-  //Eep = 3.0296;//[GeV] scattered electron energy
-  //theta_e = 7.0;//[deg] scattered angle
-
-  //E12-15-008 Aida Mthesis(48Ca)
-  //Ee  = 4.52;//[GeV] beam energy
-  //Eep = 3.0296;//[GeV] scattered electron energy
-  //theta_e = 7.0;//[deg] scattered angle
-
-  //JK Mthesis
-  //Ee  = 4.5238;//[GeV] beam energy
-  //Eep = 3.0951;//[GeV] scattered electron energy
-  //theta_e = 7.0;//[deg] scattered angle
 
 
   
@@ -51,13 +27,61 @@ double GetGamma(double Ee,double Eep, double theta_e){
 //////////////////////
 void VPflux(){
   
-  double Eep_min = 3.5 - 3.5*0.045;
-  double Eep_max = 3.5 + 3.5*0.045;
-  double dEp = 0.001;//[GeV]
-  double dOmega = 0.005;//[sr] solid angle
+  //input paramerters//
+  //Ee  = 4.5;//[GeV] beam energy
+  //Eep = 3.0;//[GeV] scattered electron energy
+  //theta_e = 6.5;//[deg] scattered angle
+
+  //E05-115
+  //Ee       = 2.344  ;//[GeV] beam energy
+  //Eep      = 0.844  ;//[GeV] scattered electron energy
+  //mom bite = 0.17 
+  //solid a  = 0.007
+  //theta_e  = 7.0    ;//[deg] scattered angle
+
+  //E12-15-008 proposal (48Ca proposal)
+  //Ee       = 4.5238 ; //[GeV] beam energy
+  //Eep      = 3.0296 ; //[GeV] scattered electron energy
+  //mom bite = 0.045   //assumption
+  //solid a  = 0.005   //assumption
+  //theta_e  = 7.0    ;//[deg] scattered angle
+
+  //E12-15-008 Aida Mthesis(48Ca)
+  //Ee       = 4.52  ;//[GeV] beam energy
+  //Eep      = 3.0296;//[GeV] scattered electron energy
+  //mom bite = 0.053 //from thesis
+  //solid a  = 0.005  //from thesis (acutually 4-7 msr depending mom and angle
+  //theta_e  = 7.0   ;//[deg] scattered angle
+  
+  //Fujita Mthesis(48Ca)
+  //Ee       = 4.52  ;//[GeV] beam energy
+  //Eep      = 3.0296;//[GeV] scattered electron energy
+  //mom bite = 0.05   //from thesis
+  //solid a  = 0.006  //from thesis (acutually 4-7 msr depending mom and angle
+  //theta_e  = 7.0   ;//[deg] scattered angle
+
+  //JK Mthesis
+  //Ee  = 4.5238;//[GeV] beam energy
+  //Eep = 3.0951;//[GeV] scattered electron energy
+  //theta_e = 7.0;//[deg] scattered angle
+
+  //Nagao DE+DK
+  //Ee       = 4.5    ; //[GeV] beam energy
+  //Eep      = 3.0    ; //[GeV] scattered electron energy
+  //mom bite = 0.045   //assumption
+  //solid a  = 0.0034   //assumption
+  //theta_e  = 6.5    ;//[deg] scattered angle
+  
+  double beam       =2.344;//4.5  ;
+  double Eep_center =0.844;//3.0  ;
+  double Eep_range  =0.17 ;//0.045;//relative momentum bite
+  double dOmega     =0.008;//0.006;//[sr] solid angle
+  double theta      =4.0  ;//deg
+
+  double Eep_min = Eep_center - Eep_center*Eep_range;
+  double Eep_max = Eep_center + Eep_center*Eep_range;
+  double dEp = 0.0001;//[GeV]
   double intGamma = 0.;
-  double theta = 6.5;//deg
-  double beam = 4.5;
 
   double Eep = Eep_min + 0.5*dEp;
   
@@ -69,6 +93,7 @@ void VPflux(){
   }
 
 
+  cout<<"center of Gamma = " <<GetGamma(beam,Eep_center,theta)<<" /GeV/sr"<<endl;
   cout<<"integrated Gamma = "<<intGamma<<" /electron"<<endl;
 
 }

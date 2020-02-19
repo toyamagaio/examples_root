@@ -19,7 +19,7 @@ TH2F *h_frame = new TH2F("h_frame","h_frame",10,-0.2, 2.2, 10, -0.2, 2.2);
 h_frame->GetXaxis()->SetNdivisions(000);
 h_frame->GetYaxis()->SetNdivisions(000);
 h_frame->SetStats(0);
-h_frame->SetTitle();
+h_frame->SetTitle("");
 double x0 = 0.10;
 double y0 = 0.50;
 

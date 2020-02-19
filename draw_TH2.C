@@ -44,6 +44,7 @@ void draw_TH2(){
   TH2F *h2 = new TH2F("h2","h2",30,-1, 1,30,-1,1);
   TH2F *h2_scat, *h2_colz, *h2_arr, *h2_box,*h2_cont, *h2_cont1,*h2_cont2,*h2_cont3,*h2_cont4;
   TH2F *h2_text, *h2_lego, *h2_lego2, *h2_surf, *h2_surf2, *h2_surf3;
+  TH2F *h2_contz, *h2_cont4z, *h2_lego2z, *h2_surf2z;
   SetTH2org(h2,"2D hist","x","y");
 
 
