@@ -1,0 +1,52 @@
+#root files, pdf
+*.root
+*.pdf
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Dictionary source files
+G__*.cxx
+G__*.h
+etc/allDict.cxx
+etc/allDict.h
+*_dictContent.h
+*_dictUmbrella.h
+*_rdict.pcm
+
+# MacOS Xcode
+xcuserdata
+project.xcworkspace
+
+# MacOS metadata
+.DS_Store
+
+# Visual Code
+.vscode/*
+.build
+
+# CLion
+.idea/*
+
+# QtCreator
+CMakeLists.txt.user
+*.autosave
+
+# Eclipse
+.settings/*
+.cproject
+
+# Vim
+*.swp
