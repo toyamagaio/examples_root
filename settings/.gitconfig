@@ -1,0 +1,11 @@
+[user]
+	name = toyama
+	email = toyama@lambda.phys.tohoku.ac.jp
+[push]
+	default = upstream
+[color]
+	ui = auto
+[alias]
+	st = status
+	br = branch
+	co = checkout
