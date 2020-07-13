@@ -1,0 +1,4 @@
+setenv LOCAL_INST_DIR /usr/local/hep/
+setenv G4SYSTEM Linux-g++
+setenv G4INSTALL $LOCAL_INST_DIR/geant4.10.05.p01
+setenv Geant4_DIR $LOCAL_INST_DIR/geant4.10.05.p01
