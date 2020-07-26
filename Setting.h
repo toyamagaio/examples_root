@@ -11,6 +11,7 @@
 #include "TApplication.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TH3.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TF1.h"
@@ -28,6 +29,7 @@
 #include "TStyle.h"
 #include "TROOT.h"
 #include "TGraphErrors.h"
+#include "TGraphAsymmErrors.h"
 #include "TProfile.h"
 #include "TSystem.h"
 #include "TColor.h"
@@ -43,8 +45,10 @@ public:
   //virtual ~Setting(){};
   void SetTH1(TH1 *h, TString hname, TString xname, TString yname, int LColor=1, int FStyle=0, int FColor=0);
   void SetTH2(TH2 *h, TString name, TString xname, TString yname, double min=0.8, double MStyle=1, double MSize=1.0);
-  void SetGr(TGraph *gr, TString hname, TString xname, TString yname, int LColor=1, int MColor=2, int MStyle=21, double Yoffset=0.8);
-  void SetGrErr(TGraphErrors *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double Yoffset=0, double min=0, double max=0);
+  void SetTH3(TH3 *h, TString name, TString xname, TString yname, TString zname, double min=0.8, double MStyle=1, double MSize=1.0);
+  void SetGr(TGraph *gr, TString hname, TString xname, TString yname, int LColor=1, int MColor=2, int MStyle=21, double MSize=0.8,double Yoffset=0.8);
+  void SetGrErr(TGraphErrors *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double MSize = 0.8, double Yoffset=0, double min=0, double max=0);
+  void SetGrErr(TGraphAsymmErrors *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double MSize = 0.8, double Yoffset=0, double min=0, double max=0);
   void SetTF1(TF1 *f, int LColor, int LStyle,double LWidth);
   void SetTLatex(TLatex *latex, int TColor, double TSize,int Align);
   void SetTLine(TLine *line, int LColor=2,int LStyle=0, double LWidth=1);

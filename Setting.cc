@@ -55,6 +55,36 @@ void Setting::SetTH2(TH2 *h, TString name, TString xname, TString yname, double 
   h->GetYaxis()->SetTitle(yname);
   h->GetYaxis()->CenterTitle();
   h->GetYaxis()->SetTitleFont(42);
+  h->GetYaxis()->SetTitleOffset(1.0);
+  h->GetYaxis()->SetTitleSize(0.06);
+  h->GetYaxis()->SetLabelFont(42);
+  h->GetYaxis()->SetLabelOffset(0.01);
+  ((TGaxis*)h->GetYaxis())->SetMaxDigits(3);
+
+  h->SetStats(0);
+}
+
+//____________________________________________________________________________________________
+void Setting::SetTH3(TH3 *h, TString name, TString xname, TString yname, TString zname, double min, double MStyle, double MSize){
+  h->SetTitle(name);
+  h->SetMinimum(min);
+  h->SetLineWidth(1);
+  h->SetTitleSize(0.05,"");
+  h->SetMarkerStyle(1);
+  h->SetMarkerSize(0.1);
+  h->SetMarkerColor(1);
+
+  h->GetXaxis()->SetTitle(xname);
+  h->GetXaxis()->CenterTitle();
+  h->GetXaxis()->SetTitleFont(42);
+  h->GetXaxis()->SetTitleOffset(1.0);
+  h->GetXaxis()->SetTitleSize(0.06);
+  h->GetXaxis()->SetLabelFont(42);
+  h->GetXaxis()->SetLabelOffset(0.01);
+
+  h->GetYaxis()->SetTitle(yname);
+  h->GetYaxis()->CenterTitle();
+  h->GetYaxis()->SetTitleFont(42);
   h->GetYaxis()->SetTitleOffset(0.7);
   h->GetYaxis()->SetTitleSize(0.06);
   h->GetYaxis()->SetLabelFont(42);
@@ -65,7 +95,7 @@ void Setting::SetTH2(TH2 *h, TString name, TString xname, TString yname, double 
 }
 
 //____________________________________________________________________________________________
-void Setting::SetGr(TGraph *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double Yoffset){
+void Setting::SetGr(TGraph *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double MSize, double Yoffset){
   gr->SetTitle(hname);
   gr->SetName(hname);
   gr->GetXaxis()->SetTitle(xname);
@@ -77,12 +107,12 @@ void Setting::SetGr(TGraph *gr, TString hname, TString xname, TString yname, int
   gr->SetLineColor(LColor);
   gr->SetMarkerStyle(MStyle);
   gr->SetMarkerColor(MColor);
-  gr->SetMarkerSize(0.5);
+  gr->SetMarkerSize(MSize);
   gr->GetYaxis()->SetTitleOffset(Yoffset);
 //  gr->GetYaxis()->SetRangeUser(min,max);
 }
 //____________________________________________________________________________________________
-void Setting::SetGrErr(TGraphErrors *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double Yoffset, double min, double max){
+void Setting::SetGrErr(TGraphErrors *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double MSize, double Yoffset, double min, double max){
   gr->SetTitle(hname);
   gr->SetName(hname);
   gr->GetXaxis()->SetTitle(xname);
@@ -96,7 +126,26 @@ void Setting::SetGrErr(TGraphErrors *gr, TString hname, TString xname, TString y
   gr->SetLineColor(LColor);
   gr->SetMarkerStyle(MStyle);
   gr->SetMarkerColor(MColor);
-  gr->SetMarkerSize(0.8);
+  gr->SetMarkerSize(MSize);
+  gr->GetYaxis()->SetTitleOffset(Yoffset);
+//  gr->GetYaxis()->SetRangeUser(min,max);
+}
+//____________________________________________________________________________________________
+void Setting::SetGrErr(TGraphAsymmErrors *gr, TString hname, TString xname, TString yname, int LColor, int MColor, int MStyle, double MSize, double Yoffset, double min, double max){
+  gr->SetTitle(hname);
+  gr->SetName(hname);
+  gr->GetXaxis()->SetTitle(xname);
+  gr->GetXaxis()->CenterTitle();
+  gr->GetXaxis()->SetTitleSize(0.05);
+  gr->GetXaxis()->SetTitleOffset(1.0);
+  gr->GetYaxis()->SetTitle(yname);
+  gr->GetYaxis()->SetTitleOffset(1.0);
+  gr->GetYaxis()->CenterTitle();
+  gr->GetYaxis()->SetTitleSize(0.05);
+  gr->SetLineColor(LColor);
+  gr->SetMarkerStyle(MStyle);
+  gr->SetMarkerColor(MColor);
+  gr->SetMarkerSize(MSize);
   gr->GetYaxis()->SetTitleOffset(Yoffset);
 //  gr->GetYaxis()->SetRangeUser(min,max);
 }

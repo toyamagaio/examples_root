@@ -1,4 +1,5 @@
-void efficiency(){
+#include "Setting.cc"
+void efficiency_aaa(){
 
   TH1D *h_pass  = new TH1D("h_pass" ,"h_pass" ,100,-10,10);
   TH1D *h_total = new TH1D("h_total","h_total",100,-10,10);
@@ -23,4 +24,141 @@ void efficiency(){
   c1->cd(1);h_pass ->Draw();
   c1->cd(2);h_total->Draw();
   c1->cd(3);pEff->Draw("AP");
+}
+////
+void efficiency(){
+
+  Setting *set=new Setting();
+  int Total[6]={10,100,1000,10000,100000,1000000};
+  double eff[10]={0.01,0.05,0.1,0.3,0.5,0.7,0.9,0.95,0.99,0.999};
+
+  TGraphErrors *tg_bi_eff[10];
+  TGraph *tg_bi_err[6], *tg_tedef_err_high[6], *tg_tedef_err_low[6];
+
+  TEfficiency *pEff_def[10];
+  TLegend *leg_err = new TLegend( 0.40, 0.20, 0.60, 0.40);
+  leg_err -> SetBorderSize(1);
+  leg_err -> SetFillColor(0);
+  leg_err -> SetFillStyle(1);
+  leg_err -> SetTextFont(22);
+  
+  for(int k=0;k<10;k++){
+    tg_bi_eff[k]=new TGraphErrors();
+    set->SetGrErr(tg_bi_eff[k],Form("eff. =%03lf binary",eff[k]),"N","efficiency",1,1,22+k);
+
+    pEff_def[k] = new TEfficiency(Form("pEff_def%d:eff.=%03lf:N:efficiency",k+1,eff[k]),"",Total[5],0,Total[5]);
+    pEff_def[k]->SetLineColor(2);
+  }
+  for(int i=0;i<6;i++){
+    tg_bi_err[i]        =new TGraph();
+    tg_tedef_err_high[i]=new TGraph();
+    tg_tedef_err_low[i] =new TGraph();
+    set->SetGr(tg_bi_err[i],Form("N=%d",Total[i]),"Efficiency","",1,1,22,1.0);
+    set->SetGr(tg_tedef_err_high[i],Form("N=%d",Total[i]),"Efficiency","",2,2,23,1.0);
+    set->SetGr(tg_tedef_err_low[i] ,Form("N=%d",Total[i]),"Efficiency","",4,4,24,1.0);
+    tg_tedef_err_high[i]->SetMinimum(0.);
+  }
+  leg_err -> AddEntry(tg_bi_err[0]        ,"Binary"   ,"p");
+  leg_err -> AddEntry(tg_tedef_err_high[0],"TEff. up" ,"p");
+  leg_err -> AddEntry(tg_tedef_err_low[0] ,"TEff. low","p");
+  
+  for(int i=0;i<6;i++){
+    for(int k=0;k<10;k++){
+      int Passed = Total[i]*eff[k];
+      double epsilon = (double)Passed/(double)Total[i];
+      double er_bi = sqrt(epsilon*(1.-epsilon)/(double)Total[i]);
+      //cout<<Total[i]<<" "<<Passed<<" "<<eff[k]<<" "<<er_bi<<endl;
+      tg_bi_eff[k]->SetPoint(i,Total[i],epsilon);
+      tg_bi_eff[k]->SetPointError(i,0.,er_bi);
+
+      tg_bi_err[i]->SetPoint(k,epsilon,er_bi);
+
+      pEff_def[k]->SetTotalEvents(Total[i]  ,Total[i]);
+      pEff_def[k]->SetPassedEvents(Total[i] ,Passed);
+
+      double e_high=pEff_def[k]->GetEfficiencyErrorUp(Total[i]);
+      double e_low =pEff_def[k]->GetEfficiencyErrorLow(Total[i]);
+      tg_tedef_err_high[i]->SetPoint(k,epsilon,e_high);
+      tg_tedef_err_low[i] ->SetPoint(k,epsilon,e_low);
+
+      cout<<Form("%d %d %.03lf %.03lf %lf %lf %lf",Total[i],Passed, eff[k],epsilon, er_bi, e_high, e_low)<<endl;
+    }
+  }
+
+  ///
+  //for(int i=0;i<6;i++){
+  //  for(int k=0;k<10;k++){
+  //    int Passed = Total[i]*eff[k];
+  //    double epsilon = (double)Passed/(double)Total[i];
+  //    double e_high=pEff_def[k]->GetEfficiencyErrorUp(Total[i]);
+  //    double e_low =pEff_def[k]->GetEfficiencyErrorLow(Total[i]);
+  //    tg_tedef_err_high[i]->SetPoint(k,epsilon,e_high);
+  //    tg_tedef_err_low[i] ->SetPoint(k,epsilon,e_low);
+  //  }
+  //}
+
+  TCanvas *c[6];
+  
+  for(int i=0;i<6;i++){
+    c[i]=new TCanvas(Form("c%d",i+1),Form("c%d",i+1),800,800);
+  }
+
+  c[0]->Clear();
+  c[0]->Divide(2,2);
+  for(int i=0;i<4;i++){
+    c[0]->cd(i+1);gPad->SetLogx(1);
+    pEff_def[i]->Draw("AP");
+    tg_bi_eff[i]->Draw("sameP");
+  }
+
+  c[1]->Clear();
+  c[1]->Divide(2,2);
+  for(int i=0;i<4;i++){
+    c[1]->cd(i+1);gPad->SetLogx(1);
+    pEff_def[i+4]->Draw("AP");
+    tg_bi_eff[i+4]->Draw("sameP");
+  }
+
+  c[2]->Clear();
+  c[2]->Divide(2,2);
+  for(int i=0;i<2;i++){
+    c[2]->cd(i+1);gPad->SetLogx(1);
+    pEff_def[i+8]->Draw("AP");
+    tg_bi_eff[i+8]->Draw("sameP");
+  }
+  //tg_bi_err[2]->Draw("AP");
+  //tg_bi_eff[2]->Draw("AP");
+  c[3]->Clear();
+  c[3]->Divide(1,2);
+  for(int i=0;i<2;i++){
+    c[3]->cd(i+1);gPad->SetLogx(0);
+    tg_tedef_err_high[i]->Draw("AP");
+    tg_tedef_err_low[i] ->Draw("sameP");
+    tg_bi_err[i]->Draw("sameP");
+    leg_err ->Draw("same");
+  }
+
+  c[4]->Clear();
+  c[4]->Divide(1,2);
+  for(int i=0;i<2;i++){
+    c[4]->cd(i+1);gPad->SetLogx(0);
+    tg_tedef_err_high[i+2]->Draw("AP");
+    tg_tedef_err_low[i+2] ->Draw("sameP");
+    tg_bi_err[i+2]->Draw("sameP");
+    leg_err ->Draw("same");
+  }
+
+  c[5]->Clear();
+  c[5]->Divide(1,2);
+  for(int i=0;i<2;i++){
+    c[5]->cd(i+1);gPad->SetLogx(0);
+    tg_tedef_err_high[i+4]->Draw("AP");
+    tg_tedef_err_low[i+4] ->Draw("sameP");
+    tg_bi_err[i+4]->Draw("sameP");
+    leg_err ->Draw("same");
+  }
+
+  c[0]->Print("pdf/tefficiency.pdf[");
+  for(int i=0;i<6;i++)c[i]->Print("pdf/tefficiency.pdf");
+  c[5]->Print("pdf/tefficiency.pdf]");
 }
