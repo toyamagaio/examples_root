@@ -39,8 +39,8 @@ void TwoHisto_pad()
     cout<<i<<"  "<<ylow<<"  "<<yup<<endl;
     tp[i]  = new TPad( Form("tp%d",i+1), Form("tp%d",i+1) , 0., ylow , 1., yup );
   }
-  tp[NofHist - 1]  = new TPad( Form("tp%d",NofHist),Form("tp%d",NofHist) , 0.,        0.0, 1., l_tp_last+epsilon );
-  tp[NofHist]      = new TPad( Form("tp%d",NofHist+1),Form("tp%d",NofHist+1) , 0.,        0.0, 0.75*l_margin, 1. );//for ytitle
+  tp[NofHist - 1]  = new TPad( Form("tp%d",NofHist)  ,Form("tp%d",NofHist)   , 0.,        0.0,            1., l_tp_last+epsilon );
+  tp[NofHist]      = new TPad( Form("tp%d",NofHist+1),Form("tp%d",NofHist+1) , 0.,        0.0, 0.75*l_margin,                1. );//for ytitle
   for(int i = 0; i<NofHist+1; i++){
     cout<<i<<endl;
     tp[i] -> SetBottomMargin(gap_margin);
@@ -48,7 +48,7 @@ void TwoHisto_pad()
     tp[i] -> SetLeftMargin(  l_margin );
     tp[i] -> SetRightMargin( r_margin );
     tp[i] -> SetTickx(0);
-    tp[i] -> SetTicky(0);
+    tp[i] -> SetTicky(1);
     tp[i] -> SetLogy(0);
     tp[i] -> SetFrameFillStyle(4000);
     tp[i] -> SetFrameLineWidth(0);
@@ -56,16 +56,7 @@ void TwoHisto_pad()
   }
   tp[0] -> SetTopMargin( t_margin );
   tp[NofHist-1] -> SetBottomMargin( b_margin );
-  // first hist
-  hist[0] = new TH1F("h0", "h0", Nbinx, minx, maxx);
-  hist[0]->FillRandom("gaus", 10000);
-  hist[0]->SetTitle(0);
-  hist[0]->SetStats(0);
-  hist[0]->GetXaxis()->SetNdivisions(0);
-  hist[0]->GetXaxis()->SetTickLength(0);
-  //hist[0]->GetYaxis()->SetNdivisions(0);
-  //hist[0]->GetYaxis()->SetTickLength(0);
-  for(int i = 1; i<NofHist; i++){
+  for(int i = 0; i<NofHist; i++){
     hist[i] = new TH1F(Form("h%d", i), Form("h%d", i), Nbinx, minx, maxx);
     hist[i]->FillRandom("landau", 1000*i);
     hist[i]->SetTitle(0);
@@ -76,20 +67,19 @@ void TwoHisto_pad()
     //hist[i]->GetYaxis()->SetTickLength(0);
     hist[i]->SetLineColor(i+1);
   }
+  hist[0]->FillRandom("gaus", 10000);
   hist[NofHist-1]->GetXaxis()->SetTitle(xtitle.c_str());
   hist[NofHist-1]->GetXaxis()->SetTitleOffset(0.7);
-  hist[NofHist-1]->GetXaxis()->SetTitleSize(0.025*(double)NofHist);//*(double)NofHist
+  hist[NofHist-1]->GetXaxis()->SetTitleSize(0.025*(double)NofHist);
   hist[NofHist-1]->GetXaxis()->CenterTitle();
 
   // make TGaxis X
   TGaxis *axis_x[NofHist];
   TGaxis *axis_y[NofHist];
   TLine *line = new TLine();
-  line -> SetLineColor(2);line->SetLineWidth(1);line->SetLineStyle(1);
-
+  line -> SetLineColor(1);line->SetLineWidth(1);line->SetLineStyle(1);
 
   for(int i = 0; i<NofHist; i++){
-  //for(int i = NofHist-1; i>=0; i--){
     // Draw histogram
     double max_y     = hist[i]->GetMaximum()*1.01;
 
@@ -133,16 +123,13 @@ void TwoHisto_pad()
       axis_x[i]->SetTickSize(10000);
       line->DrawLineNDC(1.-r_margin,0.,1.-r_margin,1.);//right vertical
       line->DrawLineNDC(   l_margin,0.,   l_margin,1.);//left vertical
-      //line->DrawLineNDC(0.6,0.,0.6,3.);//right vertical
-      //line->DrawLineNDC(0.,1.,1.,1.);//right vertical
-      //line->DrawLineNDC(0.,0.,1.,0.);//left vertical
-      //line->DrawLineNDC(0.,0.,1.,1.);//right vertical
       axis_x[i]->Draw();
     }
 
 
   }
 
+  //Draw y title
   TLatex *latex=new TLatex();
   latex -> SetTextSize(0.32); 
   latex -> SetTextColor(1);
