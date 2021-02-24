@@ -11,7 +11,8 @@ bool AddBinCont(TH1F **h, TGaxis **x_ax, TGaxis **y_ax, double minx, double maxx
 
     y_ax[i] = new TGaxis(minx, i*max_yaxis, minx, (i+1)*max_yaxis, 
 			   0, max_y,
-			   505,"-");
+			   505,"S-");
+    y_ax[i]->SetTickLength(0.16);
 
     if(i == 0){
       x_ax[i] = new TGaxis(minx, 0, maxx, 0,
@@ -22,6 +23,7 @@ bool AddBinCont(TH1F **h, TGaxis **x_ax, TGaxis **y_ax, double minx, double maxx
 			     minx, maxx,
 			     510,"U+-");
     }
+    x_ax[i]->SetTickLength(0.06);
 
   }
   return true;
