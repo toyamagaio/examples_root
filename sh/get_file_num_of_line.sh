@@ -2,7 +2,7 @@
 
 #echo $#
 if [ $# -ne 1 ];then
-  echo "usage: ${0} {runnum}"
+  echo "usage: ${0} {file}"
   exit
 fi
 

@@ -1,31 +1,4 @@
 #include "Setting.cc"
-void efficiency_aaa(){
-
-  TH1D *h_pass  = new TH1D("h_pass" ,"h_pass" ,100,-10,10);
-  TH1D *h_total = new TH1D("h_total","h_total",100,-10,10);
-
-  int NEv=10000;
-  for(int n=0;n<NEv;n++){
-    if(n%1000==0)cout<<n<<" / "<<NEv<<endl;
-    double val=gRandom->Uniform( 0,1);
-    double y  =gRandom->Uniform(-5,5);
-    if(TMath::Gaus(y,0,1.)>val)h_pass ->Fill( y );
-    h_total->Fill( y );
-  }
-
-
-  TEfficiency  *pEff = new TEfficiency( *h_pass, *h_total);
-  pEff->SetTitle("Efficiency;val;Efficiency");
-  // this will write the TEfficiency object to "myfile.root"
-  //   // AND pEff will be attached to the current directory
-
-  TCanvas *c1=new TCanvas("c1","c1",800,800);
-  c1->Divide(2,2);
-  c1->cd(1);h_pass ->Draw();
-  c1->cd(2);h_total->Draw();
-  c1->cd(3);pEff->Draw("AP");
-}
-////
 void efficiency(){
 
   Setting *set=new Setting();
@@ -162,3 +135,84 @@ void efficiency(){
   for(int i=0;i<6;i++)c[i]->Print("pdf/tefficiency.pdf");
   c[5]->Print("pdf/tefficiency.pdf]");
 }
+///
+void efficiency_lowstat(){
+  gStyle->SetPadGridX(1);
+  gStyle->SetPadGridY(1);
+  TH1D *h_pass  = new TH1D("h_pass" ,"h_pass" ,6,0,12);
+  TH1D *h_total = new TH1D("h_total","h_total",6,0,12);
+
+  TLatex *latex = new TLatex();
+  latex->SetTextFont(22);//20->Times bold, 2->precision
+  latex->SetTextSize(0.05);//ratio against canvas pad size
+  latex->SetTextColor(1);
+  latex->SetTextAlign(13);
+
+  //bin:   1   2   3    4   5    6  
+  //mean:  1   3   5    7   9   11  
+  //pass:  0   1   0    1   0   10  
+  //tot:   1   1  10   10   0   10  
+  //val:  0/1 1/1 0/10 1/10 0  10/10
+
+  double mean[]={1,  3 , 5 ,  7  ,  9 , 11};
+  int    pass[]={0,  1 , 0 ,  1  ,  0 , 10};
+  int    tot[] ={1,  1 ,10 , 10  ,  0 , 10};
+
+  h_pass->Fill(3);
+  h_pass->Fill(7);
+  h_total->Fill(1);
+  h_total->Fill(3);
+  for(int i=0;i<10;i++){
+    h_pass ->Fill(11);
+    h_total->Fill(5);
+    h_total->Fill(7);
+    h_total->Fill(11);
+  }
+
+
+  TEfficiency  *pEff = new TEfficiency( *h_pass, *h_total);
+  pEff->SetTitle("Efficiency;val;Efficiency");
+  double e_mean=pEff->GetEfficiency(1);
+  double e_high=pEff->GetEfficiencyErrorUp(1);
+  double e_low =pEff->GetEfficiencyErrorLow(1);
+  cout<<"first bin"<<e_mean<<" +"<<e_high<<" -"<<e_low<<endl;
+
+  TCanvas *c1=new TCanvas("c1","c1",1200,800);
+  c1->Divide(2,2);
+  c1->cd(1);gPad->SetLogy(0);h_pass ->Draw();
+  c1->cd(2);gPad->SetLogy(0);h_total->Draw();
+  c1->cd(3);gPad->SetLogy(0);pEff->Draw("AP");
+  for(int i=0;i<6;i++)latex->DrawLatex(mean[i]+0.2,0.8,Form("%d/%d",pass[i],tot[i]));
+  c1->cd(4);gPad->SetLogy(1);pEff->Draw("AP");
+  for(int i=0;i<6;i++)latex->DrawLatex(mean[i]+0.2,0.8,Form("%d/%d",pass[i],tot[i]));
+
+
+}
+///
+void efficiency_aaa(){
+
+  TH1D *h_pass  = new TH1D("h_pass" ,"h_pass" ,100,-10,10);
+  TH1D *h_total = new TH1D("h_total","h_total",100,-10,10);
+
+  int NEv=10000;
+  for(int n=0;n<NEv;n++){
+    if(n%1000==0)cout<<n<<" / "<<NEv<<endl;
+    double val=gRandom->Uniform( 0,1);
+    double y  =gRandom->Uniform(-5,5);
+    if(TMath::Gaus(y,0,1.)>val)h_pass ->Fill( y );
+    h_total->Fill( y );
+  }
+
+
+  TEfficiency  *pEff = new TEfficiency( *h_pass, *h_total);
+  pEff->SetTitle("Efficiency;val;Efficiency");
+  // this will write the TEfficiency object to "myfile.root"
+  //   // AND pEff will be attached to the current directory
+
+  TCanvas *c1=new TCanvas("c1","c1",800,800);
+  c1->Divide(2,2);
+  c1->cd(1);h_pass ->Draw();
+  c1->cd(2);h_total->Draw();
+  c1->cd(3);pEff->Draw("AP");
+}
+////
