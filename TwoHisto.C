@@ -24,7 +24,7 @@ void TwoHisto()
   TCanvas *c1 = new TCanvas("c1","c1",800,800);
   gStyle->SetPadGridX(0);
   gStyle->SetPadGridY(0);
-  gPad->SetLogy(1);
+  gPad->SetLogy(0);
   base->Draw("AH");
   
   // prepare histogram
@@ -50,7 +50,7 @@ void TwoHisto()
       hist[i]->AddBinContent(bin+1, i*(max_yaxis));
     }
 
-    hist[i]->Draw("same");
+    //hist[i]->Draw("same");
 
     // Draw y axis
     axis_y[i] = new TGaxis(minx, i*max_yaxis, minx, (i+1)*max_yaxis, 

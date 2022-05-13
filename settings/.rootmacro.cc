@@ -9,18 +9,18 @@ const double hbar = 6.58211928*1e-22;  // Planc constant (reduced) (MeV x s)
 const double hbarc = 197.3269718;      // conversion constant (MeV x fm)
 const double kb = 8.6173324*1e-5;      // Boltzmann constant
 const double e = 1.602176565*1e-19;    // electron charge magnitude (C)
-const double c = 0.299792458;          // speed of light in vacuum (m/ns)
+//const double c = 0.299792458;          // speed of light in vacuum (m/ns)
 const double re = 2.817e-13;           // classical electron radius (cm)
 const double Na = 6.02214129*1e+23;    // Avogadro constant
 const double Me = 0.510998928;         // electron     mass (MeV/c2)
 const double Mmu = 105.6583715;        // muon         mass (MeV/c2)
-const double Mpi = 139.57018;          // charged pion mass (MeV/c2)
+//const double Mpi = 139.57018;          // charged pion mass (MeV/c2)
 const double Mpi0 = 134.9766;          // charged pion mass (MeV/c2)
-const double MK = 493.677;             // charged Kaon mass (MeV/c2)
-const double Mp = 938.272046;          // proton       mass (MeV/c2)
-const double Mn = 939.565379;          // proton       mass (MeV/c2)
+//const double MK = 493.677;             // charged Kaon mass (MeV/c2)
+//const double Mp = 938.272046;          // proton       mass (MeV/c2)
+//const double Mn = 939.565379;          // proton       mass (MeV/c2)
 const double Mu = 931.494061;          // proton       mass (MeV/c2)
-const double ML = 1115.683;            // Lambda       mass (MeV/c2)
+//const double ML = 1115.683;            // Lambda       mass (MeV/c2)
 const double MS0 = 1192.642;           // Sigma Zero   mass (MeV/c2)
 const double MSm = 1197.449;           // Sigma Minus  mass (MeV/c2)
 const double MSp = 1189.37;            // Sigma Plus   mass (MeV/c2)
@@ -256,6 +256,14 @@ double landaugaus_pol1(double *x, double *par) {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 double landaugaus_pol2(double *x, double *par) {
   return landaugaus(x,par) + par[4] + par[5]*x[0] + par[6]*x[0]*x[0];
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+double landaugaus_exp(double *x, double *par) {
+  return landaugaus(x,par) + par[4]*exp( par[5]*(x[0]) ) ;
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+double landaugaus_exp_inv(double *x, double *par) {
+  return landaugaus(x,par) + par[4]*exp( par[5]/(x[0]) ) ;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
