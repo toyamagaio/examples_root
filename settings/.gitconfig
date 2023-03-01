@@ -1,6 +1,7 @@
 [user]
 	name = toyama
-	email = toyama@lambda.phys.tohoku.ac.jp
+	email = toyama@isc.chubu.ac.jp
+	#email = toyama@lambda.phys.tohoku.ac.jp
 [push]
 	default = upstream
 [color]
