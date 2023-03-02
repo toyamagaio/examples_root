@@ -265,6 +265,40 @@ double landaugaus_exp(double *x, double *par) {
 double landaugaus_exp_inv(double *x, double *par) {
   return landaugaus(x,par) + par[4]*exp( par[5]/(x[0]) ) ;
 }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+double rectgaus(double *x, double *par) {
+  //par[0]=amplitude
+  //par[1]=rectangle region
+  //par[2]=Width (sigma) of convoluted Gaussian function
+  //par[3]=Shift of Function Peak
+  double np = 5000.0;      // number of convolution steps
+  double sc =   8.0;      // convolution extends to +-sc Gaussian sigmas
+  double xx, fgaus, sum = 0.0, xlow, xupp, step, i;
+  double fland;
+  double val;
+
+// Range of convolution integral
+  //xlow = 0;
+  xlow = x[0] - sc * par[2];
+  xupp = x[0] + sc * par[2];
+  step = (xupp-xlow) / np;
+// Convolution integral
+  for(i=1.0; i<=np/2; i++){
+     xx = xlow + (i-0.5) * step - par[3];
+     if(xx<fabs(par[1]))fland = 1.;
+     else               fland = 0.;
+     sum += fland * TMath::Gaus(x[0],xx,par[2]);
+
+     xx = xupp - (i-.5) * step - par[3];
+     if(xx<fabs(par[1]))fland = 1.;
+     else               fland = 0.;
+     sum += fland * TMath::Gaus(x[0],xx,par[2]);
+  }
+//  val = par[2] * step * sum * invsq2pi / par[3];
+  val = par[0] * step * sum;
+
+  return val;
+}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //struct Vavilov_Func {  //cannot use old version
