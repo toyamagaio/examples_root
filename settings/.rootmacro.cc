@@ -210,61 +210,61 @@ void BinLogY(TH2 *h){
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-double landaugaus(double *x, double *par) {
-   //par[0]=Width (scale) parameter of Landau density
-   //par[1]=Most Probable (MP, location) parameter of Landau density
-   //par[2]=Total area (integral -inf to inf, normalization constant)
-   //par[3]=Width (sigma) of convoluted Gaussian function
-  double invsq2pi = 0.3989422804014;   // (2 pi)^(-1/2)
-  double mpshift  = -0.22278298;       // Landau maximum location
-  double np = 100.0;      // number of convolution steps
-  double sc =   5.0;      // convolution extends to +-sc Gaussian sigmas
-  double xx, mpc, fland, sum = 0.0, xlow,xupp, step, i;
-  double val;
-
-// MP shift correction
-  mpc = par[1] - mpshift * par[0];
-// Range of convolution integral
-  xlow = x[0] - sc * par[3];
-  xupp = x[0] + sc * par[3];
-  step = (xupp-xlow) / np;
-// Convolution integral of Landau and Gaussian by sum
-  for(i=1.0; i<=np/2; i++) {
-     xx = xlow + (i-.5) * step;
-     fland = TMath::Landau(xx,mpc,par[0]) / par[0];
-     sum += fland * TMath::Gaus(x[0],xx,par[3]);
-
-     xx = xupp - (i-.5) * step;
-     fland = TMath::Landau(xx,mpc,par[0]) / par[0];
-     sum += fland * TMath::Gaus(x[0],xx,par[3]);
-  }
-  val = par[2] * step * sum * invsq2pi / par[3];
-
-  return val;
-}
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-double landaugaus_pol0(double *x, double *par) {
-  return landaugaus(x,par) + par[4];
-}
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-double landaugaus_pol1(double *x, double *par) {
-  return landaugaus(x,par) + par[4] + par[5]*x[0];
-}
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-double landaugaus_pol2(double *x, double *par) {
-  return landaugaus(x,par) + par[4] + par[5]*x[0] + par[6]*x[0]*x[0];
-}
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-double landaugaus_exp(double *x, double *par) {
-  return landaugaus(x,par) + par[4]*exp( par[5]*(x[0]) ) ;
-}
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-double landaugaus_exp_inv(double *x, double *par) {
-  return landaugaus(x,par) + par[4]*exp( par[5]/(x[0]) ) ;
-}
+//double landaugaus(double *x, double *par) {
+//   //par[0]=Width (scale) parameter of Landau density
+//   //par[1]=Most Probable (MP, location) parameter of Landau density
+//   //par[2]=Total area (integral -inf to inf, normalization constant)
+//   //par[3]=Width (sigma) of convoluted Gaussian function
+//  double invsq2pi = 0.3989422804014;   // (2 pi)^(-1/2)
+//  double mpshift  = -0.22278298;       // Landau maximum location
+//  double np = 100.0;      // number of convolution steps
+//  double sc =   5.0;      // convolution extends to +-sc Gaussian sigmas
+//  double xx, mpc, fland, sum = 0.0, xlow,xupp, step, i;
+//  double val;
+//
+//// MP shift correction
+//  mpc = par[1] - mpshift * par[0];
+//// Range of convolution integral
+//  xlow = x[0] - sc * par[3];
+//  xupp = x[0] + sc * par[3];
+//  step = (xupp-xlow) / np;
+//// Convolution integral of Landau and Gaussian by sum
+//  for(i=1.0; i<=np/2; i++) {
+//     xx = xlow + (i-.5) * step;
+//     fland = TMath::Landau(xx,mpc,par[0]) / par[0];
+//     sum += fland * TMath::Gaus(x[0],xx,par[3]);
+//
+//     xx = xupp - (i-.5) * step;
+//     fland = TMath::Landau(xx,mpc,par[0]) / par[0];
+//     sum += fland * TMath::Gaus(x[0],xx,par[3]);
+//  }
+//  val = par[2] * step * sum * invsq2pi / par[3];
+//
+//  return val;
+//}
+//
+////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//double landaugaus_pol0(double *x, double *par) {
+//  return landaugaus(x,par) + par[4];
+//}
+//
+////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//double landaugaus_pol1(double *x, double *par) {
+//  return landaugaus(x,par) + par[4] + par[5]*x[0];
+//}
+//
+////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//double landaugaus_pol2(double *x, double *par) {
+//  return landaugaus(x,par) + par[4] + par[5]*x[0] + par[6]*x[0]*x[0];
+//}
+////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//double landaugaus_exp(double *x, double *par) {
+//  return landaugaus(x,par) + par[4]*exp( par[5]*(x[0]) ) ;
+//}
+////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//double landaugaus_exp_inv(double *x, double *par) {
+//  return landaugaus(x,par) + par[4]*exp( par[5]/(x[0]) ) ;
+//}
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 double rectgaus(double *x, double *par) {
   //par[0]=amplitude
