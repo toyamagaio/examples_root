@@ -29,7 +29,7 @@ gStyle->SetOptStat("MER");
   
   gRandom -> SetSeed( time(NULL) ); //seed set by time
   
-    for(int i;i<100000;i++){//generate gauss distribution
+    for(int i=0;i<100000;i++){//generate gauss distribution
       double y = gRandom -> Gaus(MPV,sigma);
       hist->Fill(y);
     }
